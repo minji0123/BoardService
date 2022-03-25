@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html
+        lang="ko"
+        xmlns:th="http://www.thymeleaf.org"
+>
+
+<head>
+    <title>Board</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!--local css-->
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <!--bootstrap-->
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    >
+    <!--fontAwesome-->
+    <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.0.6/css/all.css"
+    >
+</head>
+
+<body>
+    <h1 th:text="${question.subject}"></h1>
+    <div th:text="${question.content}"></div>
+
+    <hr>
+<!--#lists.size(이터러블객체): 타임리프가 제공하는 유틸리티로 객체의 길이를 반환-->
+    <h5 th:text="|${#lists.size(question.answerList)} 개의 답변이 있습니다.|"> </h5>
+    <div>
+        <ul>
+            <li th:each="answer: ${question.answerList}" th:text="${answer.content}"></li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <form th:action="@{|/answer/create/{question.id}|}" method="post">
+        <textarea id="content" name="content" rows="15"></textarea>
+        <input type="submit" value="답변등록">
+    </form>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html
+        lang="ko"
+        xmlns:th="http://www.thymeleaf.org"
+>
+
+<head>
+    <title>Board</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!--local css-->
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <!--bootstrap-->
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    >
+    <!--fontAwesome-->
+    <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.0.6/css/all.css"
+    >
+</head>
+
+<body>
+    <table>
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>작성일시</th>
+        </tr>
+        </thead>
+
+    <!--/detail/과 같은 문자열과 ${question.id}와 같은 자바 객체의 값을 더할 때는 |로 감싸 주어야 한다.-->
+        <tbody>
+            <tr th:each="question, index: ${questionList}">
+                <td> <a th:href="@{|/question/detail/${question.id}|}"  th:text="${question.subject}"></a> </td>
+                <td th:text="${question.createdDate}"></td>
+            </tr>
+        </tbody>
+
+    </table>
+</body>
+</html>
