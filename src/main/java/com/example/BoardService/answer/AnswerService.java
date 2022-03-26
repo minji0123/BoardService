@@ -1,7 +1,6 @@
 package com.example.BoardService.answer;
 
 import com.example.BoardService.question.Question;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,4 +28,18 @@ public class AnswerService {
 
         return answerRepository.save(answer);
     }
+
+
+    // 위의 메소드와 비교해보고 싶어서 적음
+    public Answer create(Question question, Answer answer) {
+
+
+        answer.setContent(answer.getContent());
+        answer.setCreateDate(LocalDateTime.now());
+        answer.setQuestion(question);
+
+        return answerRepository.save(answer);
+    }
+
+
 }

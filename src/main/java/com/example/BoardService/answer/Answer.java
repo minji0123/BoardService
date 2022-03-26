@@ -5,7 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
+// Entity for Answer
 @Entity
 @Data
 public class Answer {
@@ -23,5 +23,6 @@ public class Answer {
     private Question question;
     // 답변 모델에서 질문 모델을 참조하기 위해 추가 (부모는 Question, 자식은 Answer)
     // ex) answer.getQuestion().getSubject()
+
 
 }

@@ -25,13 +25,13 @@ class QuestionCRTest {
         Question q1 = new Question();
         q1.setSubject("제목1");
         q1.setContent("내용1");
-        q1.setCreatedDate(LocalDateTime.now());
+        q1.setCreateDate(LocalDateTime.now());
         questionRepository.save(q1);
 
         Question q2 = new Question();
         q2.setSubject("제목2");
         q2.setContent("내용2");
-        q2.setCreatedDate(LocalDateTime.now());
+        q2.setCreateDate(LocalDateTime.now());
         questionRepository.save(q2);
     }
 

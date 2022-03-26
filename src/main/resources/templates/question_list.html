@@ -1,32 +1,12 @@
-<!DOCTYPE HTML>
-<html
-        lang="ko"
-        xmlns:th="http://www.thymeleaf.org"
->
-
-<head>
-    <title>Board</title>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-    <!--local css-->
-    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
-    <!--bootstrap-->
-    <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-    >
-    <!--fontAwesome-->
-    <link
-            rel="stylesheet"
-            href="https://use.fontawesome.com/releases/v5.0.6/css/all.css"
-    >
-</head>
+<html layout:decorate="~{layout}" >
 
 <body>
-    <table>
-        <thead>
+<div layout:fragment="content" class="container my-3">
+
+    <table class="table">
+        <thead class="table-dark">
         <tr>
+            <th>번호</th>
             <th>제목</th>
             <th>작성일시</th>
         </tr>
@@ -34,12 +14,65 @@
 
     <!--/detail/과 같은 문자열과 ${question.id}와 같은 자바 객체의 값을 더할 때는 |로 감싸 주어야 한다.-->
         <tbody>
-            <tr th:each="question, index: ${questionList}">
+        <!-- 번호는 loop.count를 사용하여 표시-->
+            <tr th:each="question, loop: ${paging}">
+
+                <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
                 <td> <a th:href="@{|/question/detail/${question.id}|}"  th:text="${question.subject}"></a> </td>
-                <td th:text="${question.createdDate}"></td>
+
+                <!-- 질문 제목에 답변 개수 표시
+                    if 로 답변이 있는지 알아보고, 있으면은 답변 개수를 표시하게 코드를 짬-->
+               <span class="text-danger small ms-2"
+                      th:if="${#lists.size(question.answerList) > 0}"
+                      th:text="${#lists.size(question.answerList)}">
+                </span>
+
+                <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+
             </tr>
         </tbody>
 
     </table>
+
+    <!-- 페이징처리 -->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+
+            <!-- 이전 페이지가 없는 경우에는 "이전" 링크가 비활성화(disabled)-->
+            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{|?page=${paging.number-1}|}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <!--페이지 리스트를 루프 돌면서 해당 페이지로 이동할 수 있는 링크를 생성. 이때 루프 도중 페이지 == 현재 페이지 active(강조)-->
+            <!-- if 문으로 (현재 페이지 기준)페이지를 -3 ~ +3 개까지 표시하게 설정 -->
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:if="${page >= paging.number-3 and page <= paging.number+3}"
+                th:classappend="${page == paging.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+
+            <!-- 다음 페이지가 없는 경우에는 "다음" 링크가 비활성화(disabled)-->
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+                    <span>다음</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
+
+    <a th:href="@{/question/create}" class="btn btn-primary">질문 등록하기</a>
+</div>
 </body>
 </html>
+
+<!--이전 페이지가 없으면 비활성화	th:classappend="${!paging.hasPrevious} ? 'disabled'"-->
+<!--다음 페이지가 없으면 비활성화	th:classappend="${!paging.hasNext} ? 'disabled'"-->
+<!--이전 페이지 링크	th:href="@{|?page=${paging.number-1}|}"-->
+<!--다음 페이지 링크	th:href="@{|?page=${paging.number+1}|}"-->
+<!--페이지 리스트 루프	th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"-->
+<!--현재 페이지와 같은지 체크	th:classappend="${page == paging.number} ? 'active'"-->

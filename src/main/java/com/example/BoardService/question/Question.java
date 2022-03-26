@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-
+// Entity for Question
 @Data
 @Entity
 public class Question {
@@ -24,7 +24,7 @@ public class Question {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime createDate;
 
     @OneToMany(mappedBy = "question")
     // mappedBy는 참조 모델의 속성명을 의미
@@ -32,5 +32,8 @@ public class Question {
     private List<Answer> answerList;
     // 답변 모델에서 질문 모델을 참조하기 위해 추가 (부모는 Question, 자식은 Answer)
     // question.getAnswerList()
+
+
+
 
 }

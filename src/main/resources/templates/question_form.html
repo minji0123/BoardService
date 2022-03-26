@@ -1,0 +1,28 @@
+<html layout:decorate="~{layout}">
+<body>
+    <div layout:fragment="content" class="container">
+        <h5 class="my-3 border-bottom pb-2">질문등록</h5>
+
+        <form th:action="@{/question/create}" th:object="${questionForm}" method="post">
+
+            <div th:replace="form_errors :: formErrorsFragment"></div>
+
+            <div class="mb-3">
+                <label for="subject" class="form-label">제목</label>
+                <input type="text" th:field="*{subject}" class="form-control">
+                <!-- th:field="*{subject}": 내용유지.-->
+            </div>
+            <div class="mb-3">
+                <label for="content" class="form-label">내용</label>
+                <textarea class="form-control" name="content" rows="10"></textarea>
+            </div>
+            <input type="submit" value="저장하기" class="btn btn-primary my-2">
+        </form>
+
+    </div>
+</body>
+</html>
+
+<!--th:replace 속성을 사용하면 공통 템플릿을 템플릿 내에 삽입할수 있다.-->
+<!--QuestionForm에서 검증에 실패한 오류 메시지는 #fields.allErrors()로 구할 수 있다.-->
+<!--오류를 표시하기 위해서는 타임리프의 th:object 속성을 사용한다.-->
