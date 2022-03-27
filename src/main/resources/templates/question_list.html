@@ -18,15 +18,14 @@
             <tr th:each="question, loop: ${paging}">
 
                 <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
-                <td> <a th:href="@{|/question/detail/${question.id}|}"  th:text="${question.subject}"></a> </td>
-
-                <!-- 질문 제목에 답변 개수 표시
-                    if 로 답변이 있는지 알아보고, 있으면은 답변 개수를 표시하게 코드를 짬-->
-               <span class="text-danger small ms-2"
-                      th:if="${#lists.size(question.answerList) > 0}"
-                      th:text="${#lists.size(question.answerList)}">
-                </span>
-
+                <td> <a th:href="@{|/question/detail/${question.id}|}"  th:text="${question.subject}"></a>
+                    <!-- 질문 제목에 답변 개수 표시
+                            if 로 답변이 있는지 알아보고, 있으면은 답변 개수를 표시하게 코드를 짬-->
+                    <span class="text-danger small ms-2"
+                          th:if="${#lists.size(question.answerList) > 0}"
+                          th:text="${#lists.size(question.answerList)}">
+                    </span>
+                </td>
                 <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
 
             </tr>

@@ -14,6 +14,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // 유저 생성
     public SiteUser create(String username, String email, String password) {
         SiteUser user = new SiteUser();
         user.setUsername(username);

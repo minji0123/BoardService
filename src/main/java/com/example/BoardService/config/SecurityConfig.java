@@ -1,17 +1,26 @@
 package com.example.BoardService.config;
 
+import com.example.BoardService.user.UserSecurityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    // 로그인 처리 담당 service 추가
+    @Autowired
+    private UserSecurityService userSecurityService;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -23,6 +32,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .headers()
         .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+        // 로그인 설정
+        .and()
+        .formLogin()
+        .loginPage("/user/login")
+        .defaultSuccessUrl("/question/list")
+        // 로그아웃 설정
+        .and()
+        .logout()
+        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+        .logoutSuccessUrl("/question/list")
+        .invalidateHttpSession(true)
         ;
     }
 
@@ -34,6 +54,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         return new BCryptPasswordEncoder();
     }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // AuthenticationManagerBuilder 객체 auth는 스프링 시큐리티의 인증을 담당
+
+        // auth 객체에 사용자 조회를 UserSecurityService가 담당하도록 설정
+        // 비밀번호 검증에 사용할 passwordEncoder도 함께 등록해야 한다.
+        auth.userDetailsService(userSecurityService).passwordEncoder(passwordEncoder());
+    }
+
 
 }
 /*
