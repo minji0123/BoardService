@@ -9,13 +9,32 @@
             <div class="card-text" style="white-space: pre-line;" th:text="${question.content}"></div>
             <div class="d-flex justify-content-end">
                 <div class="badge bg-light text-dark p-2 text-start">
+
+                    <!-- 작성자가 null 일때 빼고 출력 -->
+                    <div class="mb-2">
+                        <span th:if="${question.author != null}" th:text="${question.author.username}"></span>
+                    </div>
+
                     <div th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
             </div>
+
+            <!--질문수정버튼-->
+            <div class="my-3">
+                <!--if 문으로 로그인한 사용자와 글쓴이가 동일한 경우에만 노출-->
+                <a th:href="@{|/question/modify/${question.id}|}" class="btn btn-sm btn-outline-secondary"
+                   sec:authorize="isAuthenticated()"
+                   th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+                   th:text="수정"></a>
+                    <!--#authentication.getPrincipal()-->
+            </div>
+
+
         </div>
     </div>
 
 
+    <!--답변 form-->
     <h5 class="border-bottom my-3 py-2"
         th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
     <div th:each="answer : ${question.answerList}">
@@ -24,6 +43,12 @@
                 <div class="card-text" style="white-space: pre-line;" th:text="${answer.content}"></div>
                 <div class="d-flex justify-content-end">
                     <div class="badge bg-light text-dark p-2 text-start">
+
+                        <!-- 작성자가 null 일때 빼고 출력 -->
+                        <div class="mb-2">
+                            <span th:if="${question.author != null}" th:text="${question.author.username}"></span>
+                        </div>
+
                         <div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
                     </div>
                 </div>
@@ -35,14 +60,17 @@
     <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
         <div th:replace="form_errors :: formErrorsFragment"></div>
 
+        <!--disabled: 로그아웃 상태이면 (isAnonymous()) 입력을 못하게 막움-->
+        <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
+        <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
 
-        <textarea  th:field="*{content}" rows="10" class="form-control"></textarea>
         <input type="submit" value="답변등록" class="btn btn-primary my-2">
     </form>
 
 
 </div>
-
 </body>
-
 </html>
+
+<!--sec:authorize="isAnonymous()" - 현재 로그아웃 상태-->
+<!--sec:authorize="isAuthenticated()" - 현재 로그인 상태-->

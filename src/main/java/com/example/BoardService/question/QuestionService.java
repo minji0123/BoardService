@@ -1,5 +1,6 @@
 package com.example.BoardService.question;
 
+import com.example.BoardService.user.SiteUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,12 +30,13 @@ public class QuestionService {
     }
 
     // 질문 생성
-    public Question create(String subject, String content){
+    public Question create(String subject, String content, SiteUser user){
 
         Question question = new Question();
         question.setSubject(subject);
         question.setContent(content);
         question.setCreateDate(LocalDateTime.now());
+        question.setAuthor(user);
         return questionRepository.save(question);
     }
 
@@ -50,4 +52,14 @@ public class QuestionService {
         return questionList;
     }
 
+
+    // 질문 수정
+    public Question modify(Question question, String subject, String content){
+
+        question.setSubject(subject);
+        question.setContent(content);
+        question.setModifyDate(LocalDateTime.now());
+
+        return questionRepository.save(question);
+    }
 }

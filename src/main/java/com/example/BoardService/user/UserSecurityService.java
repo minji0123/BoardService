@@ -3,6 +3,7 @@ package com.example.BoardService.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,10 +28,10 @@ public class UserSecurityService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         // 사용자명으로 사용자 정보를 조회
-        Optional<SiteUser> _siteUser = userRepository.findByUsername(username);
+        Optional<SiteUser> _siteUser = userRepository.findByusername(username);
 
         // 조회된 사용자 정보가 없으면 예외를 발생시킴
-        if (!_siteUser.isPresent()) {
+        if (_siteUser.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
 
@@ -44,7 +45,7 @@ public class UserSecurityService implements UserDetailsService {
         } else {
             authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));
         }
-        return null;
+        return new User(siteUser.getUsername(), siteUser.getPassword(), authorities);
     }
 
 

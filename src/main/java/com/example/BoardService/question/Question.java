@@ -1,6 +1,7 @@
 package com.example.BoardService.question;
 
 import com.example.BoardService.answer.Answer;
+import com.example.BoardService.user.SiteUser;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class Question {
     private String content;
 
     private LocalDateTime createDate;
+    private LocalDateTime modifyDate;
 
     @OneToMany(mappedBy = "question")
     // mappedBy는 참조 모델의 속성명을 의미
@@ -34,6 +36,8 @@ public class Question {
     // question.getAnswerList()
 
 
-
+    // 한명이 여러 질문을 작성할 수 있다.
+    @ManyToOne
+    private SiteUser author;
 
 }

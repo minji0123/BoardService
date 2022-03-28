@@ -5,9 +5,10 @@
 
     <table class="table">
         <thead class="table-dark">
-        <tr>
+        <tr class="text-center">
             <th>번호</th>
-            <th>제목</th>
+            <th style="width:50%">제목</th>
+            <th>글쓴이</th>
             <th>작성일시</th>
         </tr>
         </thead>
@@ -15,10 +16,12 @@
     <!--/detail/과 같은 문자열과 ${question.id}와 같은 자바 객체의 값을 더할 때는 |로 감싸 주어야 한다.-->
         <tbody>
         <!-- 번호는 loop.count를 사용하여 표시-->
-            <tr th:each="question, loop: ${paging}">
+            <tr class="text-center" th:each="question, loop: ${paging}">
 
                 <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
-                <td> <a th:href="@{|/question/detail/${question.id}|}"  th:text="${question.subject}"></a>
+
+                <td class="text-start">
+                    <a th:href="@{|/question/detail/${question.id}|}"  th:text="${question.subject}"></a>
                     <!-- 질문 제목에 답변 개수 표시
                             if 로 답변이 있는지 알아보고, 있으면은 답변 개수를 표시하게 코드를 짬-->
                     <span class="text-danger small ms-2"
@@ -26,6 +29,8 @@
                           th:text="${#lists.size(question.answerList)}">
                     </span>
                 </td>
+                <!-- 작성자가 null 일때 빼고 출력 -->
+                <td><span th:if="${question.author != null}" th:text="${question.author.username}"></span></td>
                 <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
 
             </tr>

@@ -18,7 +18,7 @@ class QuestionServiceTest {
         for (int i = 0; i <= 300; i++) {
             String subject = String.format("testSubjectData [%03d]", i);
             String content = "testContentData";
-            this.questionService.create(subject, content);
+            questionService.create(subject, content,null);
 
         }
     }

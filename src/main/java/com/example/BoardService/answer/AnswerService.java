@@ -1,6 +1,7 @@
 package com.example.BoardService.answer;
 
 import com.example.BoardService.question.Question;
+import com.example.BoardService.user.SiteUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ public class AnswerService {
     private AnswerRepository answerRepository;
 
     // 질문에 대한 답변을 저장한다.
-    public Answer create(Question question, String content) {
+    public Answer create(Question question, String content, SiteUser user) {
         // 파라미터_content: 템플릿에서 답변으로 입력한 내용(content)을 얻기 위해 추가한 변수
 
         // 답변 객체를 생성하고
@@ -25,21 +26,10 @@ public class AnswerService {
         answer.setContent(content);
         answer.setCreateDate(LocalDateTime.now());
         answer.setQuestion(question);
-
+        answer.setAuthor(user);
         return answerRepository.save(answer);
     }
 
-
-    // 위의 메소드와 비교해보고 싶어서 적음
-    public Answer create(Question question, Answer answer) {
-
-
-        answer.setContent(answer.getContent());
-        answer.setCreateDate(LocalDateTime.now());
-        answer.setQuestion(question);
-
-        return answerRepository.save(answer);
-    }
 
 
 }
